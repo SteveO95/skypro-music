@@ -12,11 +12,11 @@ export function getTracks(): Promise<getTrackResponse> {
     })
     .then((res) => {
       return {
-        error: undefined,
+        error: null,
         data: res,
       };
     })
     .catch((error: Error) => {
-      return { error: error.message, data: undefined };
+      return { error: error.message, data: null };
     });
 }

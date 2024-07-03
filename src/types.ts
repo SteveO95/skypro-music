@@ -19,6 +19,6 @@ export type trackType = {
     email: string;
   };
    export type getTrackResponse = {
-    error: string | undefined;
-    data: trackType[] | undefined;
+    error: string | null;
+    data: trackType[] | null;
   };

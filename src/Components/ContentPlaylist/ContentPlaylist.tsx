@@ -8,15 +8,15 @@ import { getTrackResponse } from "../../types";
 
 export default function ContentPlaylist() {
   const [tracks, setTracks] = useState<getTrackResponse>({
-    error: undefined,
-    data: undefined,
+    error: null,
+    data: null,
   });
   useEffect(() => {
     getTracks().then((res) => {
       setTracks(res);
     });
   }, []);
-  // console.log(tracks);
+
   return (
     <div className={classNames(styles.contentPlaylist, styles.playlist)}>
       {tracks?.data?.map((item, index) => (
