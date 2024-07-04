@@ -20,5 +20,5 @@ export type trackType = {
   };
    export type getTrackResponse = {
     error: string | null;
-    data: trackType[] | null;
+    data: any | null;
   };
