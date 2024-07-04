@@ -4,18 +4,11 @@ import PlayListItem from "../PlaylistItem/PlayListItem";
 import classNames from "classnames";
 import { useState, useEffect } from "react";
 import { getTracks } from "../../api/tracks/tracks";
-import { getTrackResponse } from "../../types";
+// import { getTrackResponse } from "../../types";
 
-export default function ContentPlaylist() {
-  const [tracks, setTracks] = useState<getTrackResponse>({
-    error: null,
-    data: null,
-  });
-  useEffect(() => {
-    getTracks().then((res) => {
-      setTracks(res);
-    });
-  }, []);
+// eslint-disable-next-line @next/next/no-async-client-component
+export default async function ContentPlaylist() {
+  const tracks = await getTracks();
 
   return (
     <div className={classNames(styles.contentPlaylist, styles.playlist)}>
