@@ -4,11 +4,12 @@ import classNames from 'classnames';
 import styles from './ContentPlaylist.module.css';
 import PlayListItem from '../PlaylistItem/PlayListItem';
 import { getTracks } from '../../api/tracks/tracks';
+import { trackType } from '../../types';
 
 export default function ContentPlaylist() {
-  const [tracks, setTracks] = useState(null);
+  const [tracks, setTracks] = useState<trackType[] | null>(null);
   const [loading, setLoading] = useState(true); // Состояние для отслеживания загрузки данных
-  const [error, setError] = useState(null); // Состояние для отслеживания ошибок
+  const [error, setError] = useState(""); // Состояние для отслеживания ошибок
 
   useEffect(() => {
     async function fetchTracks() {
@@ -35,7 +36,7 @@ export default function ContentPlaylist() {
 
   return (
     <div className={classNames(styles.contentPlaylist, styles.playlist)}>
-      {tracks.map((item) => (
+      {tracks && tracks.map((item) => (
         <PlayListItem key={item.id} item={item} /> // Используйте уникальный id в качестве ключа
       ))}
     </div>
