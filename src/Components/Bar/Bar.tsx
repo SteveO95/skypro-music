@@ -1,38 +1,110 @@
+"use client";
 import classNames from "classnames";
 import styles from "./Bar.module.css";
-import BarVolumeBlock from "../BarVolumeBlock/BarVolumeBlock";
-
-export default function Bar() {
+import BarVolumeBlock from "@components/BarVolumeBlock/BarVolumeBlock";
+import { trackType } from "../../types";
+import { useState } from "react";
+import { useRef } from "react";
+import ProgressBar from "@components/ProgressBar/ProgressBar";
+import { formatTime } from './../../lib/formatTime';
+type barProps = {
+  currentTrack: trackType | null;
+};
+export default function Bar({ currentTrack }: barProps) {
+  if (!currentTrack) {
+    return;
+  }
+  const [currentTime, setCurrentTime] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const duration = audioRef.current?.duration || 0;
+  const [isLoop, setIsLoop] = useState(false);
+  const togglePlay = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+  function changeProgressBar(e: React.ChangeEvent<HTMLInputElement>) {
+    if (audioRef.current) {
+      audioRef.current.currentTime = Number(e.target.value);
+    }
+  }
+  const handleLoop = () => {
+    if (audioRef.current) {
+      audioRef.current.loop = !isLoop;
+      setIsLoop(!isLoop);
+    }
+  };
+  
   return (
     <div className={styles.bar}>
+      <audio
+        autoPlay
+        src={currentTrack.track_file}
+        ref={audioRef}
+        onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
+      />
       <div className={styles.barContent}>
-        <div className={styles.barPlayerProgress}></div>
+        <div>{formatTime(currentTime)}/{formatTime(duration)}</div>
+        <ProgressBar
+          max={duration}
+          value={currentTime}
+          step={0.01}
+          onChange={changeProgressBar}
+        />
         <div className={styles.barPlayerBlock}>
           <div className={classNames(styles.barPlayer, styles.player)}>
             <div className={styles.playerControls}>
               <div className={styles.playerBtnPrev}>
-                <svg className={styles.playerBtnPrevSvg}>
+                <svg
+                  onClick={() => alert("Еще не реализовано!")}
+                  className={styles.playerBtnPrevSvg}
+                >
                   <use href="/img/icon/sprite.svg#icon-prev"></use>
                 </svg>
               </div>
-              <div className={classNames(styles.playerBtnPlay, styles._btn)}>
+              <div
+                onClick={togglePlay}
+                className={classNames(styles.playerBtnPlay, styles._btn)}
+              >
                 <svg className={styles.playerBtnPlaySvg}>
-                  <use href="/img/icon/sprite.svg#icon-play"></use>
+                  {!isPlaying ? (
+                    <use href="/img/icon/sprite.svg#icon-play"></use>
+                  ) : (
+                    <use href="/img/icon/sprite.svg#icon-pause"></use>
+                  )}
                 </svg>
               </div>
               <div className={styles.playerBtnNext}>
                 <svg className={styles.playerBtnNextSvg}>
-                  <use href="/img/icon/sprite.svg#icon-next"></use>
+                  <use
+                    onClick={() => alert("Еще не реализовано!")}
+                    href="/img/icon/sprite.svg#icon-next"
+                  ></use>
                 </svg>
               </div>
               <div
+                onClick={handleLoop}
                 className={classNames(styles.playerBtnRepeat, styles._btnIcon)}
               >
-                <svg className={styles.playerBtnRepeatSvg}>
-                  <use href="/img/icon/sprite.svg#icon-repeat"></use>
-                </svg>
+                {" "}
+                {!isLoop ? (
+                  <svg className={styles.playerBtnRepeatSvg}>
+                    <use href="/img/icon/sprite.svg#icon-repeat"></use>
+                  </svg>
+                ) : (
+                  <svg className={styles.playerBtnRepeatSvgActive}>
+                    <use href="/img/icon/sprite.svg#icon-repeat"></use>
+                  </svg>
+                )}
               </div>
               <div
+                onClick={() => alert("Еще не реализовано!")}
                 className={classNames(styles.playerbtnshuffle, styles._btnicon)}
               >
                 <svg className={styles.playerBtnShuffleSvg}>
@@ -52,12 +124,12 @@ export default function Bar() {
                 </div>
                 <div className={styles.trackPlayAuthor}>
                   <a className={styles.trackPlayAuthorLink} href="http://">
-                    Ты та...{" "}
+                    {currentTrack.author}
                   </a>
                 </div>
                 <div className={styles.trackPlayAlbum}>
                   <a className={styles.trackPlayAlbumLink} href="http://">
-                    Баста
+                    {currentTrack.album}
                   </a>
                 </div>
               </div>
@@ -80,7 +152,7 @@ export default function Bar() {
               </div>
             </div>
           </div>
-          <BarVolumeBlock />
+          <BarVolumeBlock audioRef={audioRef} />
         </div>
       </div>
     </div>
