@@ -3,10 +3,20 @@ import ContentPlaylist from '@components/ContentPlaylist/ContentPlaylist';
 import FilterBlock from '@components/FilterBlock/FilterBlock';
 import classNames from 'classnames';
 import { trackType } from '../../types';
+
 type centerBlockProps = {
 	setCurrentTrack: (item: trackType) => void;
+	currentTrack: trackType | null;
+	isPlaying: boolean;
+	setIsPlaying: (isPlaying: boolean) => void;
 };
-export default function CenterBlock({ setCurrentTrack }: centerBlockProps) {
+
+export default function CenterBlock({
+	setCurrentTrack,
+	currentTrack,
+	isPlaying,
+	setIsPlaying,
+}: centerBlockProps) {
 	return (
 		<div className={classNames(styles.mainCenterBlock, styles.centerBlock)}>
 			<div className={classNames(styles.centerBlockSearch, styles.search)}>
@@ -46,11 +56,9 @@ export default function CenterBlock({ setCurrentTrack }: centerBlockProps) {
 				</div>
 				<ContentPlaylist
 					setCurrentTrack={setCurrentTrack}
-					currentTrack={null}
-					isPlaying={undefined}
-					setIsPlaying={function (isPlaying: boolean | any): void {
-						throw new Error('Function not implemented.');
-					}}
+					currentTrack={currentTrack}
+					isPlaying={isPlaying}
+					setIsPlaying={setIsPlaying}
 				/>
 			</div>
 		</div>

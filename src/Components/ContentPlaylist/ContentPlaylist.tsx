@@ -1,6 +1,11 @@
 import classNames from 'classnames';
 import { Key, useEffect, useState } from 'react';
 import { getTracks } from '../../api/tracks/tracks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import {
+	setCurrentTrack,
+	setTrackArray,
+} from '../../store/features/playlistSlice';
 import { getTrackResponse, trackType } from '../../types';
 import PlayListItem from '../PlaylistItem/PlayListItem';
 import styles from './ContentPlaylist.module.css';
@@ -13,26 +18,35 @@ type contentPlaylistProps = {
 };
 
 export default function ContentPlaylist({
-	setCurrentTrack,
+	// setCurrentTrack,
 	currentTrack,
 	isPlaying,
 	setIsPlaying,
 }: contentPlaylistProps) {
+	const dispatch = useAppDispatch();
+	const tracksArray = useAppSelector(state => state.playlist.trackArray);
+
 	const [tracks, setTracks] = useState<getTrackResponse>({
 		error: null,
-		data: undefined,
+		data: null,
 	});
+
+	const setTrackAccept = (trackType: trackType) => {
+		trackType;
+		dispatch(setCurrentTrack(trackType));
+	};
 
 	useEffect(() => {
 		async function fetchTracks() {
 			try {
 				const response = await getTracks();
 				setTracks({ error: null, data: response.data });
+				dispatch(setTrackArray(response.data));
 			} catch (error) {
 				// Проверка, является ли ошибка объектом с полем message
 				const errorMessage =
 					error instanceof Error ? error.message : 'An unknown error occurred';
-				setTracks({ error: errorMessage, data: undefined });
+				setTracks({ error: errorMessage, data: null });
 			}
 		}
 		fetchTracks();
@@ -47,37 +61,15 @@ export default function ContentPlaylist({
 	return (
 		<div className={classNames(styles.contentPlaylist, styles.playlist)}>
 			{tracks.error && <p>Error: {tracks.error}</p>}
-			{tracks.data?.map(
-				(
-					item: {
-						id: number;
-						name: string;
-						author: string;
-						release_date: string;
-						genre: string;
-						duration_in_seconds: number;
-						album: string;
-						logo: string | null;
-						track_file: string;
-						stared_user: {
-							id: number;
-							username: string;
-							first_name: string;
-							last_name: string;
-							email: string;
-						}[];
-					},
-					index: Key | null | undefined
-				) => (
-					<PlayListItem
-						onClick={() => {
-							setCurrentTrack(item);
-						}}
-						key={index}
-						item={item}
-					/>
-				)
-			)}
+			{tracksArray?.map((item: trackType, index: Key | null | undefined) => (
+				<PlayListItem
+					onClick={() => {
+						setTrackAccept(item);
+					}}
+					item={item}
+					key={index}
+				/>
+			))}
 		</div>
 	);
 }

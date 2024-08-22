@@ -1,66 +1,58 @@
 'use client';
+
+import { useAppDispatch, useAppSelector } from '../../hooks';
+
 import BarVolumeBlock from '@components/BarVolumeBlock/BarVolumeBlock';
 import ProgressBar from '@components/ProgressBar/ProgressBar';
 import classNames from 'classnames';
-import { useEffect, useRef, useState } from 'react';
-import { trackType } from '../../types';
+import { useEffect, useRef } from 'react';
 import { formatTime } from './../../lib/formatTime';
 import styles from './Bar.module.css';
-type barProps = {
-	currentTrack: trackType | null;
-};
-export default function Bar({ currentTrack }: barProps) {
-	if (!currentTrack) {
-		return;
-	}
-	const [currentTime, setCurrentTime] = useState(0);
-	const [isPlaying, setIsPlaying] = useState(true);
+
+export default function Bar() {
+	const { currentTrack, isPlaying } = useAppSelector(
+		(state: { playlist: any }) => state.playlist
+	);
+	const dispatch = useAppDispatch();
 	const audioRef = useRef<HTMLAudioElement>(null);
-	const duration = audioRef.current?.duration || 0;
-	const [isLoop, setIsLoop] = useState(false);
-	const togglePlay = () => {
-		if (!audioRef.current) return;
 
-		if (isPlaying) {
-			audioRef.current.pause();
-		} else {
-			audioRef.current.play();
-		}
-
-		setIsPlaying(!isPlaying);
-	};
-	// Этот useEffect отслеживает изменение currentTrack и запускает трек, если он изменился.
 	useEffect(() => {
-		setIsPlaying(true);
-	}, [currentTrack]);
+		if (audioRef.current && currentTrack) {
+			audioRef.current.src = currentTrack.track_file;
+			isPlaying ? audioRef.current.play() : audioRef.current.pause();
+		}
+	}, [currentTrack, isPlaying]);
 
-	function changeProgressBar(e: React.ChangeEvent<HTMLInputElement>) {
+	const togglePlay = () => {
+		// dispatch(setIsPlaying(!isPlaying));
+	};
+
+	const changeProgressBar = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (audioRef.current) {
 			audioRef.current.currentTime = Number(e.target.value);
 		}
-	}
+	};
+
 	const handleLoop = () => {
 		if (audioRef.current) {
-			audioRef.current.loop = !isLoop;
-			setIsLoop(!isLoop);
+			audioRef.current.loop = !audioRef.current.loop;
 		}
 	};
 
 	return (
 		<div className={styles.bar}>
-			<audio
-				autoPlay
-				src={currentTrack.track_file}
-				ref={audioRef}
-				onTimeUpdate={e => setCurrentTime(e.currentTarget.currentTime)}
-			/>
+			<audio ref={audioRef} />
 			<div className={styles.barContent}>
 				<div>
-					{formatTime(currentTime)}/{formatTime(duration)}
+					{currentTrack
+						? `${formatTime(audioRef.current?.currentTime || 0)}/${formatTime(
+								audioRef.current?.duration || 0
+						  )}`
+						: 'No track'}
 				</div>
 				<ProgressBar
-					max={duration}
-					value={currentTime}
+					max={audioRef.current?.duration || 0}
+					value={audioRef.current?.currentTime || 0}
 					step={0.01}
 					onChange={changeProgressBar}
 				/>
@@ -99,8 +91,7 @@ export default function Bar({ currentTrack }: barProps) {
 								onClick={handleLoop}
 								className={classNames(styles.playerBtnRepeat, styles._btnIcon)}
 							>
-								{' '}
-								{!isLoop ? (
+								{!audioRef.current?.loop ? (
 									<svg className={styles.playerBtnRepeatSvg}>
 										<use href='/img/icon/sprite.svg#icon-repeat'></use>
 									</svg>
@@ -119,47 +110,8 @@ export default function Bar({ currentTrack }: barProps) {
 								</svg>
 							</div>
 						</div>
-
-						<div
-							className={classNames(styles.playerTrackPlay, styles.trackPlay)}
-						>
-							<div className={styles.trackPlayContain}>
-								<div className={styles.trackPlayImage}>
-									<svg className={styles.trackPlaySvg}>
-										<use href='/img/icon/sprite.svg#icon-note'></use>
-									</svg>
-								</div>
-								<div className={styles.trackPlayAuthor}>
-									<a className={styles.trackPlayAuthorLink} href='http://'>
-										{currentTrack.author}
-									</a>
-								</div>
-								<div className={styles.trackPlayAlbum}>
-									<a className={styles.trackPlayAlbumLink} href='http://'>
-										{currentTrack.album}
-									</a>
-								</div>
-							</div>
-						</div>
-
-						<div className={styles.trackPlayLikeDis}>
-							<div
-								className={classNames(styles.trackPlayLike, styles._btnIcon)}
-							>
-								<svg className={styles.trackPlayLikeSvg}>
-									<use href='/img/icon/sprite.svg#icon-like'></use>
-								</svg>
-							</div>
-							<div
-								className={classNames(styles.trackPlayDislike, styles._btnIcon)}
-							>
-								<svg className={styles.trackPlayDislikeSvg}>
-									<use href='/img/icon/sprite.svg#icon-dislike'></use>
-								</svg>
-							</div>
-						</div>
+						<BarVolumeBlock audioRef={audioRef} />
 					</div>
-					<BarVolumeBlock audioRef={audioRef} />
 				</div>
 			</div>
 		</div>

@@ -1,29 +1,41 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { trackType } from '../../types';
-//Тип состояния (PlayList)
-//currentTrack будет отвечать за текущий трек
+
+// Тип состояния (PlayList)
 type PlaylistStateType = {
 	currentTrack: null | trackType;
+	trackArray: null | trackType[];
+	isPlaying: boolean;
 };
-// Начально состояние
+
+// Начальное состояние
 const initialState: PlaylistStateType = {
 	currentTrack: null,
+	trackArray: null,
+	isPlaying: false,
 };
-// константа , в которой сохраняем результат вызова функции(пример из PlaylistStateType)
+
+// Слайс для управления состоянием плейлиста
 const playlistSlice = createSlice({
 	name: 'playlist',
 	initialState,
-	//некоторые функции которые будут выполнять
-	// манипуляции над нашим состоянием(обработка данных)
 	reducers: {
-		//trackType(объект) будем устанавливать трек
+		// Устанавливаем текущий трек
 		setCurrentTrack: (state, action: PayloadAction<trackType>) => {
-			//первое принимает состояние(актуальное на текущий момент)
-			// из action мы будем получать данные которое мы передаем в вызове (этой)функции
 			state.currentTrack = action.payload;
+		},
+		// Устанавливаем массив треков
+		setTrackArray: (state, action: PayloadAction<trackType[] | null>) => {
+			state.trackArray = action.payload;
+		},
+		// Устанавливаем состояние воспроизведения
+		setIsPlaying: (state, action: PayloadAction<boolean>) => {
+			state.isPlaying = action.payload;
 		},
 	},
 });
 
-export const { setCurrentTrack } = playlistSlice.actions;
+// Экспортируем действия и редьюсер
+export const { setCurrentTrack, setTrackArray, setIsPlaying } =
+	playlistSlice.actions;
 export const playlistReducer = playlistSlice.reducer;
