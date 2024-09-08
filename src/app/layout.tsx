@@ -6,8 +6,8 @@ import './globals.css';
 const montserrat = Montserrat({ subsets: ['cyrillic'] });
 
 export const metadata: Metadata = {
-	title: 'Skypro Music',
-	description: 'Музыкальный сервис',
+	title: 'Skypro music',
+	description: 'Музыка для души',
 };
 
 export default function RootLayout({
@@ -16,7 +16,7 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang='en'>
+		<html lang='ru'>
 			<ReduxProvider>
 				<body className={montserrat.className}>{children}</body>
 			</ReduxProvider>
