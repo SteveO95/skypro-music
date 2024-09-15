@@ -17,7 +17,7 @@ const Track = ({ track, tracks }: TrackProps) => {
 	const { name, author, album, duration_in_seconds } = track;
 
 	const dispatch = useAppDispatch();
-	const { isLiked, handleLike } = useLikeTrack(track.id);
+	const { isLiked, handleLike } = useLikeTrack(track._id);
 	const { isPlaying, setIsPlaying } = usePlayerState();
 	const currentTrack = useAppSelector(state => state.playlist.currentTrack);
 
@@ -26,7 +26,7 @@ const Track = ({ track, tracks }: TrackProps) => {
 		setIsPlaying(true);
 	};
 
-	const isCurrentTrack = currentTrack?.id === track.id;
+	const isCurrentTrack = currentTrack?._id === track._id;
 
 	return (
 		<div className={styles.playlistItem}>

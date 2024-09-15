@@ -1,13 +1,13 @@
 'use client';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import Controls from '../../components/Controls/Controls';
-import TrackPlay from '../../components/TrackPlay/TrackPlay';
-import Volume from '../../components/Volume/Volume';
 import { usePlayerState } from '../../contexts/PlayerStateContext';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setNextTrack } from '../../store/features/playlistSlice';
 import { formatTime } from '../../utils/formatTime';
+import Controls from '../Controls/Controls';
 import ProgressBar from '../ProgressBar/ProgressBar';
+import TrackPlay from '../TrackPlay/TrackPlay';
+import Volume from '../Volume/Volume';
 import styles from './Bar.module.css';
 
 const Bar = () => {
@@ -81,7 +81,7 @@ const Bar = () => {
 		return null;
 	}
 
-	const { author, album, id } = currentTrack;
+	const { author, album } = currentTrack;
 	console.log(currentTrack);
 
 	return (
@@ -110,7 +110,7 @@ const Bar = () => {
 							isLoop={isLoop}
 							toggleLoop={toggleLoop}
 						/>
-						<TrackPlay author={author} album={album} id={id} />
+						<TrackPlay author={author} album={album} id={0} />
 					</div>
 					<Volume
 						step={0.01}
