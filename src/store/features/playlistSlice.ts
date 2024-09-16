@@ -45,7 +45,7 @@ const playlistSlice = createSlice({
 				? state.shuffledPlaylist
 				: state.playlist;
 			const currentTrackIndex = playlist.findIndex(
-				track => track.id === state.currentTrack?.id
+				track => track._id === state.currentTrack?._id
 			);
 			const newTrack = playlist[currentTrackIndex + 1];
 			if (newTrack) {
