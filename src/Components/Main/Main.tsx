@@ -1,24 +1,16 @@
-"use client";
+import CenterBlock from '../../components/CenterBlock/CenterBlock';
+import Navigation from '../../components/Navigation/Navigation';
+import Sidebar from '../../components/Sidebar/Sidebar';
+import styles from './Main.module.css';
 
-import Bar from "../Bar/Bar";
-import CenterBlock from "../CenterBlock/CenterBlock";
-import MainSlideBar from "../MainSlideBar/MainSlideBar";
-import Nav from "../Nav/Nav";
-import styles from "../Main/Main.module.css";
-import { useState, useEffect } from "react";
-import { trackType } from "../../types";
+const Main = () => {
+	return (
+		<main className={styles.main}>
+			<Navigation />
+			<CenterBlock />
+			<Sidebar />
+		</main>
+	);
+};
 
-export default function Main() {
-  const [currentTrack, setCurrentTrack] = useState<trackType | null>();
-  return (
-    <>
-      <main className={styles.main}>
-        <Nav />
-        <CenterBlock setCurrentTrack={setCurrentTrack} />
-        <MainSlideBar />
-      </main>
-      {currentTrack? <Bar currentTrack={currentTrack} /> : ""}
-      <footer> </footer>
-    </>
-  );
-}
+export default Main;
