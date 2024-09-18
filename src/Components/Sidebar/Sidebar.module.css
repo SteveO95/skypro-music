@@ -5,8 +5,6 @@
 
 
 .sidebarPersonal {
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -34,16 +32,12 @@
 .sidebarBlock {
     height: 100%;
     padding: 240px 0 0 0;
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
 }
 
 .sidebarList {
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
     flex-direction: column;
     align-items: center;

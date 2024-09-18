@@ -1,13 +1,13 @@
 import classNames from 'classnames';
-import Track from '../../components/Track/Track';
 import { PlaylistType } from '../../types/playlist';
+import Track from '../Track/Track';
 import styles from './Playlist.module.css';
 
 type PlaylistProps = {
 	tracks: PlaylistType[];
 };
 
-const Playlist = ({ tracks }: PlaylistProps) => {
+const PlaylistLayout = ({ tracks }: PlaylistProps) => {
 	return (
 		<div className={styles.centerblockContent}>
 			<div className={styles.contentTitle}>
@@ -22,17 +22,17 @@ const Playlist = ({ tracks }: PlaylistProps) => {
 				</div>
 				<div className={classNames(styles.playlistTitleCol, styles.col04)}>
 					<svg className={styles.playlistTitleSvg}>
-						<use xlinkHref='img/icon/sprite.svg#icon-watch' />
+						<use xlinkHref='../img/icon/sprite.svg#icon-watch' />
 					</svg>
 				</div>
 			</div>
 			<div className={styles.contentPlaylist}>
 				{tracks.map(track => (
-					<Track key={track.id} track={track} tracks={tracks} />
+					<Track key={track._id} track={track} tracks={tracks} />
 				))}
 			</div>
 		</div>
 	);
 };
 
-export default Playlist;
+export default PlaylistLayout;

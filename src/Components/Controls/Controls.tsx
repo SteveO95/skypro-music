@@ -30,17 +30,17 @@ const Controls = ({
 				className={styles.playerBtnPrev}
 			>
 				<svg className={styles.playerBtnPrevSvg}>
-					<use xlinkHref='img/icon/sprite.svg#icon-prev' />
+					<use xlinkHref='../img/icon/sprite.svg#icon-prev' />
 				</svg>
 			</div>
 			<div onClick={togglePlay} className={styles.playerBtnPlay}>
 				{isPlaying ? (
 					<svg className={styles.playerBtnPlaySvg}>
-						<use xlinkHref='img/icon/sprite.svg#icon-pause' />
+						<use xlinkHref='../img/icon/sprite.svg#icon-pause' />
 					</svg>
 				) : (
 					<svg className={styles.playerBtnPlaySvg}>
-						<use xlinkHref='img/icon/sprite.svg#icon-play' />
+						<use xlinkHref='../img/icon/sprite.svg#icon-play' />
 					</svg>
 				)}
 			</div>
@@ -49,17 +49,17 @@ const Controls = ({
 				className={styles.playerBtnNext}
 			>
 				<svg className={styles.playerBtnNextSvg}>
-					<use xlinkHref='img/icon/sprite.svg#icon-next' />
+					<use xlinkHref='../img/icon/sprite.svg#icon-next' />
 				</svg>
 			</div>
 			<div onClick={toggleLoop} className={styles.playerBtnRepeat}>
 				{!isLoop ? (
 					<svg className={styles.playerBtnRepeatSvg}>
-						<use xlinkHref='img/icon/sprite.svg#icon-repeat' />
+						<use xlinkHref='../img/icon/sprite.svg#icon-repeat' />
 					</svg>
 				) : (
 					<svg className={styles.playerBtnRepeatSvg}>
-						<use xlinkHref='img/icon/sprite.svg#icon-repeat-active' />
+						<use xlinkHref='../img/icon/sprite.svg#icon-repeat-active' />
 					</svg>
 				)}
 			</div>
@@ -70,11 +70,11 @@ const Controls = ({
 			>
 				{!isShuffle ? (
 					<svg className={styles.playerBtnShuffleSvg}>
-						<use xlinkHref='img/icon/sprite.svg#icon-shuffle' />
+						<use xlinkHref='../img/icon/sprite.svg#icon-shuffle' />
 					</svg>
 				) : (
 					<svg className={styles.playerBtnShuffleSvg}>
-						<use xlinkHref='img/icon/sprite.svg#icon-shuffle-active' />
+						<use xlinkHref='../img/icon/sprite.svg#icon-shuffle-active' />
 					</svg>
 				)}
 			</div>
