@@ -1,3 +1,8 @@
+:root {
+  --background: #181818;
+  --background-acent: #1c1c1c;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -35,18 +40,6 @@ body {
   color: #ffffff;
 }
 
-.wrapper {
-  width: 100%;
-  min-height: 100%;
-  overflow: hidden;
-  background-color: #383838;
-}
-
-.container {
-  display: flex;
-  max-width: 1920px;
-  height: 100vh;
-  margin: 0 auto;
-  position: relative;
-  background-color: #181818;
+input:focus {
+  outline: none;
 }

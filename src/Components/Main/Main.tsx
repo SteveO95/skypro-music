@@ -1,33 +1,24 @@
-'use client';
-import { useEffect, useState } from 'react';
-import { getPlaylist } from '../../api/playlist';
-import CenterBlock from '../../components/CenterBlock/CenterBlock';
-import { useAppDispatch } from '../../hooks';
-import { setInitialTracks } from '../../store/features/playlistSlice';
-import styles from './Main.module.css';
+import Search from "../Search/Search";
+import Filter from "../Filter/Filter";
+import Playlist from "../Playlist/Playlist";
+import styles from "./Main.module.css";
 
-const Main = () => {
-	const [tracks, setTracks] = useState([]);
-	const [error, setError] = useState('');
+type Props = {
+  title: string;
+};
 
-	const dispatch = useAppDispatch();
+const Main = ({ title }: Props) => {
+  return (
+    <div className={styles.centerblock}>
+      <div className={styles.stickyContent}>
+        <Search />
+        <h2 className={styles.centerblockH2}>{title}</h2>
+        <Filter />
+      </div>
 
-	useEffect(() => {
-		getPlaylist()
-			.then(data => {
-				setTracks(data);
-				dispatch(setInitialTracks(data));
-			})
-			.catch(error => {
-				setError(error.message);
-			});
-	}, [dispatch]);
-
-	return (
-		<main className={styles.main}>
-			<CenterBlock tracks={tracks} error={error} />
-		</main>
-	);
+      <Playlist />
+    </div>
+  );
 };
 
 export default Main;

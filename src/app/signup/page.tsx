@@ -1,116 +1,125 @@
 'use client';
+
+import classNames from 'classnames';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ChangeEvent, useState } from 'react';
-import { useAppDispatch } from '../../hooks';
-import { regUser } from '../../store/features/userSlice';
+import { useState } from 'react';
+import Toast, {
+	handleError,
+	handleSuccess,
+} from '../../components/Toast/Toast';
+import Wrapper from '../../components/Wrapper/Wrapper';
+import { registration } from '../../services/api';
+import Routes from '../Routes';
 import styles from './page.module.css';
 
-function SignUpPage() {
-	const dispatch = useAppDispatch();
-	const [loginError, setLoginError] = useState<string | null>(null);
-
+export default function Signup() {
 	const router = useRouter();
 
-	const [formData, setFormData] = useState({
-		email: '',
-		password: '',
-		username: '',
-	});
+	const [username, setUsername] = useState('');
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+	const [passwordRepeat, setPasswordRepeat] = useState('');
 
-	const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-		const { name, value } = event.target;
+	const signup = async () => {
+		let clearUsername = username.trim();
+		let clearEmail = email.trim();
 
-		setFormData({
-			...formData,
-			[name]: value,
-		});
-	};
-
-	const handleSignUp = async (
-		userData: {
-			email: string;
-			password: string;
-			username: string;
-		},
-		event: React.MouseEvent<HTMLButtonElement>
-	) => {
-		event.preventDefault();
-		if (!formData.email.trim() || !formData.password.trim()) {
-			// return alert("заполнить поля!");
-			setLoginError('Пожалуйста, заполните все поля');
-			return;
+		if (clearUsername.length < 3) {
+			return handleError('Имя пользователя должно быть не менее 3 символов');
 		}
+
+		if (clearEmail.length < 3) {
+			return handleError('Почта должна быть не менее 3 символов');
+		}
+
+		if (password.length < 6) {
+			return handleError('Пароль должен быть не менее 6 символов');
+		}
+
+		if (password !== passwordRepeat) {
+			return handleError('Пароли не совпадают');
+		}
+
 		try {
-			await dispatch(regUser(userData)).unwrap();
-			console.log('Успешно!');
-			router.push('/signin');
-		} catch (error: any) {
-			console.error('Ошибка:', error.message);
-			setLoginError(error.message);
+			const result = await registration({
+				username: clearUsername,
+				email: clearEmail,
+				password: password,
+			});
+
+			if (result.success) {
+				handleSuccess('Вы успешно зарегистрировались');
+				router.push(Routes.SIGNIN);
+			} else {
+				throw new Error('Во время создания пользователя произошла ошибка!');
+			}
+		} catch (error) {
+			if (error instanceof Error) {
+				handleError(error.message);
+			} else {
+				handleError('Произошла непредвиденная ошибка');
+			}
 		}
 	};
 
 	return (
-		<div className={styles.wrapper}>
-			<div className={styles.containerEnter}>
-				<div className={styles.modalBlock}>
-					<form action='#' className={styles.modalFormLogin}>
-						<Link href='/'>
-							<div className={styles.modalLogo}>
-								<Image
-									alt='logo'
-									src='/img/logo_modal.png'
-									width={140}
-									height={21}
-								/>
+		<Wrapper>
+			<div className={styles.Wrapper}>
+				<div className={styles.ContainerSignup}>
+					<div className={styles.ModalBlock}>
+						<div className={styles.ModalFormLogin}>
+							<div className={styles.ModalLogo}>
+								<Link href={Routes.BASE}>
+									<Image
+										src='/img/logo_modal.png'
+										alt='logo'
+										width={140}
+										height={21}
+									/>
+								</Link>
 							</div>
-						</Link>
-						<input
-							onChange={handleInputChange}
-							className={styles.modalInput}
-							name='email'
-							value={formData.email}
-							placeholder='Почта'
-							type='text'
-						/>
-						<input
-							onChange={handleInputChange}
-							className={styles.modalInput}
-							name='password'
-							value={formData.password}
-							placeholder='Пароль'
-							type='password'
-						/>
-						<input
-							onChange={handleInputChange}
-							className={styles.modalInput}
-							name='username'
-							value={formData.username}
-							placeholder='Имя пользователя'
-							type='text'
-						/>
-						{loginError && <div className={styles.error}>{loginError}</div>}
-						<button
-							className={styles.modalBtnEnter}
-							onClick={e =>
-								handleSignUp(
-									{
-										email: formData.email,
-										password: formData.password,
-										username: formData.username,
-									},
-									e
-								)
-							}
-						>
-							Зарегистрироваться
-						</button>
-					</form>
+							<input
+								className={classNames(styles.ModalInput, styles.Login)}
+								type='text'
+								name='username'
+								placeholder='Имя пользователя'
+								value={username}
+								onChange={e => setUsername(e.target.value)}
+							/>
+							<input
+								className={classNames(styles.ModalInput, styles.Login)}
+								type='text'
+								name='email'
+								placeholder='Почта'
+								value={email}
+								onChange={e => setEmail(e.target.value)}
+							/>
+							<input
+								className={classNames(styles.ModalInput, styles.PasswordFirst)}
+								type='password'
+								name='password'
+								placeholder='Пароль'
+								value={password}
+								onChange={e => setPassword(e.target.value)}
+							/>
+							<input
+								className={classNames(styles.ModalInput, styles.PasswordDouble)}
+								type='password'
+								name='password'
+								placeholder='Повторите пароль'
+								value={passwordRepeat}
+								onChange={e => setPasswordRepeat(e.target.value)}
+							/>
+							<button className={styles.ModalBtnSignupEnt} onClick={signup}>
+								<a>Зарегистрироваться</a>
+							</button>
+						</div>
+					</div>
 				</div>
 			</div>
-		</div>
+			<Toast />
+		</Wrapper>
 	);
 }
-export default SignUpPage;

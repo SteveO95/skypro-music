@@ -1,53 +1,50 @@
 'use client';
 import { useState } from 'react';
-import { PlaylistType } from '../../types/playlist';
-import { getUniqueValues } from '../../utils/getUniqueValues';
+import { getUniqueValues } from '../../helpers/getUniqueValues';
+import { useAppSelector } from '../../store/store';
 import styles from './Filter.module.css';
 import FilterItem from './FilterItem/FilterItem';
 
-const SORT_OPTIONS = ['По умолчанию', 'Сначала новые', 'Сначала старые'];
+const DATES_FILTER: string[] = [
+	'По умолчанию',
+	'Сначала новые',
+	'Сначала старые',
+];
 
-type FilterProps = {
-	tracks: PlaylistType[];
-};
+const Filter = () => {
+	const tracks = useAppSelector(state => state.track.currentPlaylistState);
 
-const Filter = ({ tracks }: FilterProps) => {
-	const [activeFilter, setActiveFilter] = useState<string | null>(null);
+	const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
+	const authorList = tracks ? getUniqueValues(tracks, 'author') : [];
+	const genreList = tracks ? getUniqueValues(tracks, 'genre') : [];
 
-	const handleFilter = (filterName: string) => {
-		setActiveFilter(prev => (prev === filterName ? null : filterName));
+	const handleFilter = (newFilter: string) => {
+		setSelectedFilter(currentFilter =>
+			currentFilter === newFilter ? null : newFilter
+		);
 	};
 
-	const filters = [
-		{
-			title: 'исполнителю',
-			key: 'author',
-			list: getUniqueValues(tracks, 'author'),
-		},
-		{
-			title: 'году выпуска',
-			key: 'year',
-			list: SORT_OPTIONS,
-		},
-		{
-			title: 'жанру',
-			key: 'genre',
-			list: getUniqueValues(tracks, 'genre'),
-		},
-	];
-
 	return (
-		<div className={styles.centerblockFilter}>
+		<div className={styles.filter}>
 			<div className={styles.filterTitle}>Искать по:</div>
-			{filters.map(filter => (
-				<FilterItem
-					key={filter.title}
-					title={filter.title}
-					isActive={activeFilter === filter.title}
-					list={filter.list}
-					handleFilter={() => handleFilter(filter.title)}
-				/>
-			))}
+			<FilterItem
+				title={'исполнителю'}
+				isActive={selectedFilter == 'исполнителю'}
+				filterList={authorList}
+				handleFilter={handleFilter}
+			/>
+			<FilterItem
+				title={'году выпуска'}
+				isActive={selectedFilter == 'году выпуска'}
+				filterList={DATES_FILTER}
+				handleFilter={handleFilter}
+			/>
+			<FilterItem
+				title={'жанру'}
+				isActive={selectedFilter == 'жанру'}
+				filterList={genreList}
+				handleFilter={handleFilter}
+			/>
 		</div>
 	);
 };

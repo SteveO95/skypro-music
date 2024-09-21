@@ -1,19 +1,27 @@
 'use client';
+
 import { useEffect } from 'react';
 import Main from '../../components/Main/Main';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { getFavoriteTrack } from '../../store/features/playlistSlice';
+import useUserAuth from '../../hooks/useUserAuth';
+import {
+	getInitialPlaylist,
+	setPlaylistType,
+} from '../../store/features/trackSlice';
+import { useAppDispatch } from '../../store/store';
 
-export default function Home() {
+export default function Page() {
 	const dispatch = useAppDispatch();
-	const tokens = useAppSelector(state => state.user.tokens);
+	const { checkLogin } = useUserAuth();
 
 	useEffect(() => {
-		if (tokens) {
-			dispatch(
-				getFavoriteTrack({ access: tokens.access, refresh: tokens.refresh })
-			);
-		}
-	}, [tokens, dispatch]);
-	return <Main />;
+		const initialApp = async () => {
+			await dispatch(getInitialPlaylist());
+			await dispatch(setPlaylistType('All'));
+			await checkLogin();
+		};
+
+		initialApp();
+	}, []);
+
+	return <Main title={'Треки'} />;
 }

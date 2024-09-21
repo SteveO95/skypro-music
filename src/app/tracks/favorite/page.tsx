@@ -1,28 +1,40 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import CenterBlock from '../../../components/CenterBlock/CenterBlock';
-import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { getFavoriteTrack } from '../../../store/features/playlistSlice';
+import Routes from '../../../app/Routes';
+import Main from '../../../components/Main/Main';
+import {
+	getFavoriteTrack,
+	setInitialPlaylist,
+	setPlaylistType,
+} from '../../../store/features/trackSlice';
+import { useAppDispatch, useAppSelector } from '../../../store/store';
 
-export default function Favorite() {
+export default function Page() {
+	const router = useRouter();
 	const dispatch = useAppDispatch();
-	const favorite = useAppSelector(state => state.playlist.likedPlaylist);
-	const tokens = useAppSelector(state => state.user.tokens);
+	const accessToken = useAppSelector(state => state.auth.accessToken);
+	const refreshToken = useAppSelector(state => state.auth.refreshToken);
 
 	useEffect(() => {
-		if (tokens && tokens.access && tokens.refresh) {
-			dispatch(
-				getFavoriteTrack({ access: tokens.access, refresh: tokens.refresh })
-			)
-				.unwrap()
-				.catch(error => {
-					console.error('Ошибка:', error.message);
-				});
-		} else {
-			console.error('Ошибка избранного');
+		if (!accessToken || !refreshToken) {
+			router.push(Routes.BASE);
+			return;
 		}
-	}, [dispatch, tokens]);
 
-	return <CenterBlock tracks={favorite} />;
+		const getTracks = async () => {
+			try {
+				const favTracks = await dispatch(
+					getFavoriteTrack({ accessToken, refreshToken })
+				).unwrap();
+				await dispatch(setPlaylistType('Favorites'));
+				await dispatch(setInitialPlaylist(favTracks));
+			} catch (error) {}
+		};
+
+		getTracks();
+	}, []);
+
+	return <Main title={'Мои треки'} />;
 }

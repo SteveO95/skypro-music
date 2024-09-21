@@ -1,63 +1,82 @@
 .mainSidebar {
-    max-width: 418px;
-    padding: 20px 90px 20px 78px;
+  height: 100vh;
+  max-width: 418px;
+  padding: 0 90px 82px 78px;
+  overflow-y: auto;
 }
 
+.mainSidebar::-webkit-scrollbar {
+  display: none;
+}
 
 .sidebarPersonal {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-end;
-    padding: 12px 0 15px 0;
+  position: sticky;
+  top: 0px;
+  background-color: var(--background);
+
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+
+  flex-direction: row;
+
+  align-items: center;
+
+  justify-content: flex-end;
+  padding: 32px 0 15px 0;
+  margin-bottom: 240px;
 }
 
 .sidebarPersonalName {
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
-    color: #ffffff;
-    margin-right: 16px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: #ffffff;
+  margin-right: 16px;
 }
 
 .sidebarIcon {
-    width: 43px;
-    height: 43px;
-    background-color: #313131;
-    border-radius: 50%;
-    cursor: pointer;
+  width: 43px;
+  height: 43px;
+  background-color: #313131;
+  border-radius: 50%;
+  cursor: pointer;
 }
 
 .sidebarBlock {
-    height: 100%;
-    padding: 240px 0 0 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .sidebarList {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
 }
 
 .sidebarItem {
-    width: 250px;
-    height: 150px;
+  width: 250px;
+  height: 150px;
 }
 
 .sidebarItem:not(:last-child) {
-    margin-bottom: 30px;
+  margin-bottom: 30px;
 }
 
 .sidebarLink {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 }
 
-/* .sidebarImg {
-    width: 100%;
-    height: auto;
-} */
+.sidebarImg {
+  width: 100%;
+  height: auto;
+}

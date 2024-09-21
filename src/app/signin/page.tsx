@@ -1,113 +1,78 @@
 'use client';
-import Image from 'next/image';
-import styles from './page.module.css';
 
+import classNames from 'classnames';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ChangeEvent, useState } from 'react';
-import { useAppDispatch } from '../../hooks';
-import { getTokensState, getUser } from '../../store/features/userSlice';
+import { useState } from 'react';
+import Toast, { handleError } from '../../components/Toast/Toast';
+import Wrapper from '../../components/Wrapper/Wrapper';
+import useUserAuth from '../../hooks/useUserAuth';
+import Routes from '../Routes';
+import styles from './page.module.css';
 
-function SignInPage() {
-	const dispatch = useAppDispatch();
-	const [loginError, setLoginError] = useState<string | null>(null);
+export default function Signin() {
 	const router = useRouter();
 
-	const [formData, setFormData] = useState({
-		email: '',
-		password: '',
-	});
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+	const { setLogin } = useUserAuth();
 
-	const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-		const { name, value } = event.target; // Извлекаем имя поля и его значение
-
-		setFormData({
-			...formData, // Копируем текущие данные из состояния
-			[name]: value, // Обновляем нужное поле
-		});
-	};
-
-	const handleSignin = async (
-		userData: {
-			email: string;
-			password: string;
-		},
-		event: React.MouseEvent<HTMLButtonElement>
-	) => {
+	const signin = async (event: React.MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault();
-		if (!formData.email.trim() || !formData.password.trim()) {
-			setLoginError('Пожалуйста, заполните все поля');
-			return;
-		}
-		try {
-			// Диспетчеризация thunk getUser и разворачивание результата с помощью unwrap
-			await dispatch(getUser(userData)).unwrap();
-			// Действия после успешного выполнения thunk, если необходимо
-			// console.log("Успешно!");
 
-			//функция получения токенов
-			await dispatch(getTokensState(userData)).unwrap();
+		const result = await setLogin({ email, password });
 
-			router.push('/');
-		} catch (error: any) {
-			console.error('Ошибка:', error.message);
-			setLoginError(error.message);
-		}
+		if (typeof result === 'string') return handleError(result);
+
+		router.push(Routes.BASE);
 	};
 
 	return (
-		<div className={styles.wrapper}>
-			<div className={styles.containerEnter}>
-				<div className={styles.modalBlock}>
-					<form action='#' className={styles.modalFormLogin}>
-						<Link href='/'>
-							<div className={styles.modalLogo}>
-								<Image
-									alt='logo'
-									src='/img/logo_modal.png'
-									width={140}
-									height={21}
-								/>
+		<Wrapper>
+			<div className={styles.Wrapper}>
+				<div className={styles.ContainerEnter}>
+					<div className={styles.ModalBlock}>
+						<form className={styles.ModalFormLogin}>
+							<div className={styles.ModalLogo}>
+								<Link href={Routes.BASE}>
+									<Image
+										src='/img/logo_modal.png'
+										alt='Skyrpo logo'
+										width={140}
+										height={21}
+									/>
+								</Link>
 							</div>
-						</Link>
-						<input
-							onChange={handleInputChange}
-							className={styles.modalInput}
-							name='email'
-							value={formData.email}
-							placeholder='Почта'
-							type='text'
-						/>
-						<input
-							onChange={handleInputChange}
-							className={styles.modalInput}
-							name='password'
-							value={formData.password}
-							placeholder='Пароль'
-							type='password'
-						/>
-						{loginError && <div className={styles.error}>{loginError}</div>}
-						<button
-							className={styles.modalBtnEnter}
-							onClick={e =>
-								handleSignin(
-									{
-										email: formData.email,
-										password: formData.password,
-									},
-									e
-								)
-							}
-						>
-							Войти
-						</button>
-						<Link className={styles.modalBtnSignup} href='/signup'>
-							Зарегистрироваться
-						</Link>
-					</form>
+							<input
+								className={classNames(styles.ModalInput, styles.Login)}
+								type='text'
+								name='email'
+								placeholder='Почта'
+								autoComplete='username'
+								value={email}
+								onChange={e => setEmail(e.target.value)}
+							/>
+							<input
+								className={classNames(styles.ModalInput, styles.Password)}
+								type='password'
+								name='password'
+								placeholder='Пароль'
+								autoComplete='current-password'
+								value={password}
+								onChange={e => setPassword(e.target.value)}
+							/>
+							<button className={styles.ModalBtnEnter} onClick={signin}>
+								<a>Войти</a>
+							</button>
+							<button className={styles.ModalBtnSignup}>
+								<Link href={Routes.SIGNUP}>Зарегистрироваться</Link>
+							</button>
+						</form>
+					</div>
 				</div>
 			</div>
-		</div>
+			<Toast />
+		</Wrapper>
 	);
 }
-export default SignInPage;

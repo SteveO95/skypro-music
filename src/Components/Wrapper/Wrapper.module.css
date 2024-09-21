@@ -1,0 +1,13 @@
+.Wrapper {
+  width: 100%;
+  min-height: 100%;
+  overflow: hidden;
+}
+
+.Container {
+  max-width: 1920px;
+  height: 100vh;
+  margin: 0 auto;
+  position: relative;
+  background-color: var(--background);
+}

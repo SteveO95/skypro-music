@@ -1,0 +1,90 @@
+.filterContainer {
+  position: relative;
+}
+
+.filterButton {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  border: 1px solid #ffffff;
+  border-radius: 60px;
+  padding: 6px 20px;
+}
+
+.filterButton:not(:last-child) {
+  margin-right: 10px;
+}
+
+.active {
+}
+
+.filterButton.active {
+  border-color: #9a48f1;
+  color: #b672ff;
+}
+
+._btn-text:hover {
+  border-color: #d9b6ff;
+  color: #d9b6ff;
+  cursor: pointer;
+}
+
+._btn-text:active {
+  border-color: #ad61ff;
+  color: #ad61ff;
+  cursor: pointer;
+}
+
+.filerPopupContainer {
+  display: flex;
+  top: calc(100% + 10px);
+  position: absolute;
+  width: 248px;
+  background: #313131;
+  min-width: 248px;
+  border-radius: 12px;
+  max-height: 305px;
+  padding: 0 34px 0 34px;
+  transition: padding 0.4s ease;
+}
+
+.filerPopupContainer.active {
+  padding: 34px;
+}
+
+.filterPopup {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 10px;
+  overflow-y: auto;
+  width: 100%;
+  height: 0;
+  transition: all 0.4s ease;
+}
+
+.filerPopupContainer.active .filterPopup {
+  height: auto;
+}
+
+.filterPopup::-webkit-scrollbar {
+  width: 10px;
+}
+
+.filterPopup::-webkit-scrollbar-track {
+  background: #4b4949;
+  border-radius: 10px;
+}
+
+.filterPopup::-webkit-scrollbar-thumb {
+  background: #ffffff;
+  border-radius: 10px;
+}
+
+.filterPopupItem {
+  cursor: pointer;
+}
+
+.filterPopupItem:hover {
+  color: #d9b6ff;
+}
