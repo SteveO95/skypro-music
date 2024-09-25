@@ -3,6 +3,8 @@ export function serializeTrackTime(time: string | number): string {
   let minutes: number;
 
   seconds = typeof time === "string" ? parseInt(time) : time;
+  seconds = isNaN(seconds) || seconds < 0 || seconds > Number.MAX_SAFE_INTEGER ? 0 : seconds;
+
   minutes = Math.floor(seconds / 60);
   seconds = Math.floor(seconds % 60);
 

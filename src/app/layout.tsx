@@ -1,26 +1,26 @@
-import type { Metadata } from 'next';
-import { Montserrat } from 'next/font/google';
-import ReduxProvider from '../store/ReduxProvider';
-import './globals.css';
-// import Toast from "../../components/Toast/Toast";
+import type { Metadata } from "next";
+import { Montserrat } from "next/font/google";
+import "./globals.css";
+import ReduxProvider from "@/store/ReduxProvider";
+import Toast from "@/components/Toast/Toast";
 
-const montserrat = Montserrat({ subsets: ['cyrillic'] });
+const montserrat = Montserrat({ subsets: ["cyrillic"] });
 
 export const metadata: Metadata = {
-	title: 'Skypro music',
-	description: 'Прекрасная музыка для прекрасных людей',
+  title: "Skypro music",
+  description: "Прекрасная музыка для прекрасных людей",
 };
 
 export default function RootLayout({
-	children,
+  children,
 }: Readonly<{
-	children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-	return (
-		<html lang='ru'>
-			<ReduxProvider>
-				<body className={montserrat.className}>{children}</body>
-			</ReduxProvider>
-		</html>
-	);
+  return (
+    <html lang="ru">
+      <ReduxProvider>
+        <body className={montserrat.className}>{children}</body>
+      </ReduxProvider>
+    </html>
+  );
 }

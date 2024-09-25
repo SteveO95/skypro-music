@@ -11,7 +11,7 @@ const PlaylistItemSkeleton = ({ items = 1 }: Props) => {
   for (let i = 1; i <= items; i++) {
     tracks = [
       ...tracks,
-      <div className={styles.playlistItem} key={i}>
+      <div data-testid="playlist-item" className={styles.playlistItem} key={i}>
         <div className={styles.track}>
           <div className={styles.trackTitle}>
             <div className={styles.trackTitleImage}>

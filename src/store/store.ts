@@ -5,6 +5,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector, useStore } from "react-
 // Слайсы
 import { authReducer } from "./features/authSlice";
 import { trackReducer } from "./features/trackSlice";
+import { customCatalogReducer } from "./features/customCatalogSlice";
 
 // Функция makeStore создает и возвращает хранилище Redux с помощью функции configureStore.
 export const makeStore = () => {
@@ -13,6 +14,7 @@ export const makeStore = () => {
     reducer: combineReducers({
       auth: authReducer,
       track: trackReducer,
+      customCatalog: customCatalogReducer,
     }),
   });
 };
