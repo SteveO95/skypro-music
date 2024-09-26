@@ -1,7 +1,8 @@
-.wrapper {
+.Wrapper {
   width: 100%;
   min-height: 100%;
   overflow: hidden;
+  background-color: #262626;
 }
 
 .containerEnter {
@@ -9,26 +10,25 @@
   height: 100vh;
   margin: 0 auto;
   position: relative;
-  background-color: rgba(0, 0, 0, 0.85);
 }
 
-.modalBtnEnter:hover {
+.ModalBtnEnter:hover {
   background-color: #3f007d;
 }
 
-.modalBtnSignup:hover {
+.ModalBtnSignup:hover {
   background-color: #f4f5f6;
 }
 
-.modalBtnEnter:active {
+.ModalBtnEnter:active {
   background-color: #271a58;
 }
 
-.modalBtnSignup:active {
+.ModalBtnSignup:active {
   background-color: #d9d9d9;
 }
 
-.modalBlock {
+.ModalBlock {
   position: absolute;
   z-index: 2;
   left: calc(50% - (366px / 2));
@@ -36,7 +36,7 @@
   opacity: 1;
 }
 
-.modalFormLogin {
+.ModalFormLogin {
   width: 366px;
   height: 439px;
   background-color: #ffffff;
@@ -54,32 +54,33 @@
   padding: 43px 47px 47px 40px;
 }
 
-.modalFormLogin input:first-child {
+.ModalFormLogin input:first-child {
   margin-bottom: 30px;
 }
 
-.modalLogo {
+.ModalLogo {
   width: 140px;
   height: 21px;
   margin-bottom: 34px;
   background-color: transparent;
 }
 
-.modalLogo image {
+.Modallogo img {
   width: 140px;
   height: auto;
 }
 
-.modalInput {
+.ModalInput {
   width: 100%;
   border-top: none;
   border-left: none;
   border-right: none;
   border-bottom: 1px solid #d0cece;
   padding: 8px 1px;
+  font-size: 18px;
 }
 
-.modalInput::-webkit-input-placeholder {
+.ModalInput::-webkit-input-placeholder {
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
@@ -88,7 +89,7 @@
   color: #d0cece;
 }
 
-.modalInput:-ms-input-placeholder {
+.ModalInput:-ms-input-placeholder {
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
@@ -97,7 +98,7 @@
   color: #d0cece;
 }
 
-.modalInput::-ms-input-placeholder {
+.ModalInput::-ms-input-placeholder {
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
@@ -106,7 +107,7 @@
   color: #d0cece;
 }
 
-.modalInput::placeholder {
+.ModalInput::placeholder {
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
@@ -115,7 +116,7 @@
   color: #d0cece;
 }
 
-.modalBtnEnter {
+.ModalBtnEnter {
   width: 278px;
   height: 52px;
   background-color: #580ea2;
@@ -134,7 +135,7 @@
   justify-content: center;
 }
 
-.modalBtnEnter a {
+.ModalBtnEnter a {
   width: 100%;
   height: 100%;
   font-style: normal;
@@ -154,7 +155,7 @@
   justify-content: center;
 }
 
-.modalBtnSignup {
+.ModalBtnSignup {
   width: 278px;
   height: 52px;
   background-color: transparent;
@@ -177,7 +178,7 @@
   justify-content: center;
 }
 
-.modalBtnSignup a {
+.ModalBtnSignup a {
   width: 100%;
   height: 100%;
   font-style: normal;
@@ -197,6 +198,6 @@
   justify-content: center;
 }
 
-.login {
+.Login {
   margin-bottom: 30px;
 }

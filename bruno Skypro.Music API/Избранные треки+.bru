@@ -1,0 +1,15 @@
+meta {
+  name: Избранные треки+
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseURL}}/catalog/track/favorite/all/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjgzIiwidXNlcm5hbWUiOiJ0ZXN0cyIsImVtYWlsIjoidGVzdHNAbWFpbC5ydSIsImlhdCI6MTcyMzk1ODQ3MSwiZXhwIjoxNzIzOTYwMjcxfQ.OeY99z5LklgIyx1qc008qxbinoP_oUgpOoMe6F988zk
+}

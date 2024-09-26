@@ -1,24 +1,24 @@
-"use client";
+import Search from "../Search/Search";
+import Filter from "../Filter/Filter";
+import Playlist from "../Playlist/Playlist";
+import styles from "./Main.module.css";
 
-import Bar from "../Bar/Bar";
-import CenterBlock from "../CenterBlock/CenterBlock";
-import MainSlideBar from "../MainSlideBar/MainSlideBar";
-import Nav from "../Nav/Nav";
-import styles from "../Main/Main.module.css";
-import { useState, useEffect } from "react";
-import { trackType } from "../../types";
+type Props = {
+  title: string;
+};
 
-export default function Main() {
-  const [currentTrack, setCurrentTrack] = useState<trackType | null>();
+const Main = ({ title }: Props) => {
   return (
-    <>
-      <main className={styles.main}>
-        <Nav />
-        <CenterBlock setCurrentTrack={setCurrentTrack} />
-        <MainSlideBar />
-      </main>
-      {currentTrack? <Bar currentTrack={currentTrack} /> : ""}
-      <footer> </footer>
-    </>
+    <div className={styles.centerblock}>
+      <div className={styles.stickyContent}>
+        <Search />
+        <h2 className={styles.centerblockH2}>{title}</h2>
+        <Filter />
+      </div>
+
+      <Playlist />
+    </div>
   );
-}
+};
+
+export default Main;

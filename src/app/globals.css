@@ -1,3 +1,8 @@
+:root {
+  --background: #181818;
+  --background-acent: #1c1c1c;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -33,5 +38,8 @@ body {
   height: 100%;
   font-family: "Montserrat", sans-serif;
   color: #ffffff;
-  overflow-y:hidden;
+}
+
+input:focus {
+  outline: none;
 }

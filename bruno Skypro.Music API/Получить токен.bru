@@ -1,0 +1,27 @@
+meta {
+  name: Получить токен
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseURL}}/user/token/
+  body: json
+  auth: none
+}
+
+headers {
+  content-type: application/json
+}
+
+body:json {
+  {
+    "email": "tests@mail.ru",
+    "password": "111111"
+  }
+}
+
+body:multipart-form {
+  login: admin
+  password: password
+}

@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
+import ReduxProvider from "@/store/ReduxProvider";
+import Toast from "@/components/Toast/Toast";
 
 const montserrat = Montserrat({ subsets: ["cyrillic"] });
 
 export const metadata: Metadata = {
-  title: "Skypro Music",
-  description: "Музыкальный сервис",
+  title: "Skypro music",
+  description: "Прекрасная музыка для прекрасных людей",
 };
 
 export default function RootLayout({
@@ -15,8 +17,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={montserrat.className}>{children}</body>
+    <html lang="ru">
+      <ReduxProvider>
+        <body className={montserrat.className}>{children}</body>
+      </ReduxProvider>
     </html>
   );
 }

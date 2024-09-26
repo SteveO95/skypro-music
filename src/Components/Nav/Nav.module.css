@@ -1,8 +1,8 @@
-.mainNav {
+.nav {
   width: 244px;
-  background-color: #181818;
   padding: 20px 0 20px 36px;
-  cursor: pointer;
+  overflow: hidden;
+  background-color: var(--background-acent);
 }
 
 .navLogo {
@@ -13,7 +13,14 @@
   margin-bottom: 20px;
 }
 
+.logoImage {
+  width: 113.33px;
+  height: 17px;
+  color: #181818;
+}
+
 .navBurger {
+  cursor: pointer;
   width: 20px;
   height: 36px;
   padding: 13px 0;
@@ -29,17 +36,6 @@
   justify-content: space-between;
 }
 
-.navMenu {
-  display: block;
-  visibility: visible;
-}
-
-.logoImage {
-  width: 113.33px;
-  height: 17px;
-  color: #181818;
-}
-
 .burgerLine {
   display: inline-block;
   width: 100%;
@@ -47,8 +43,21 @@
   background-color: #d3d3d3;
 }
 
+.menu {
+  display: block;
+  position: relative;
+}
+
 .menuList {
+  position: absolute;
   padding: 18px 0 10px 0;
+  position: absolute;
+  left: -100%;
+  transition: left 0.4s ease;
+}
+
+.visible {
+  left: 0;
 }
 
 .menuItem {

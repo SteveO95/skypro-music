@@ -1,51 +1,73 @@
 "use client";
+
 import Image from "next/image";
-import Link from "next/link";
-import styles from "../Nav/Nav.module.css";
+import styles from "./Nav.module.css";
 import classNames from "classnames";
 import { useState } from "react";
+import Routes from "@/app/Routes";
+import { useRouter } from "next/navigation";
+import useUserAuth from "@/hooks/useUserAuth";
 
-export default function Nav() {
-  const [navActive, setNavActive] = useState(false);
-  function NavBurger() {
-    setNavActive(!navActive);
-  }
+import { getInitialPlaylist, setInitialPlaylist } from "@/store/features/trackSlice";
+import Link from "next/link";
+
+const Nav = () => {
+  const router = useRouter();
+  const { isAuth, setLogout } = useUserAuth();
+  const [isVisible, setIsVisible] = useState<boolean>(true);
+
+  const handleUserAuth = async () => {
+    if (isAuth) setLogout();
+    else router.push(Routes.SIGNIN);
+  };
+
+  const menuListClass = classNames({
+    [styles.menuList]: true,
+    [styles.visible]: isVisible,
+  });
+
   return (
-    <nav className={classNames(styles.mainNav, styles.nav)}>
-      <div className={classNames(styles.navLogo, styles.logo)}>
+    <nav className={styles.nav}>
+      <div className={classNames(styles.navLogo, "logo")}>
         <Image
-          alt="Логотип"
-          width={113}
-          height={17}
           className={styles.logoImage}
+          alt="Skypro logo"
           src="/img/logo.png"
+          width={114}
+          height={17}
         />
       </div>
+
       <div
-        onClick={NavBurger}
-        className={classNames(styles.navBurger, styles.burger)}
+        className={classNames(styles.navBurger, "burger")}
+        onClick={() => setIsVisible((prev) => !prev)}
       >
-        <span className={styles.burgerLine}></span>
-        <span className={styles.burgerLine}></span>
-        <span className={styles.burgerLine}></span>
+        <span className={styles.burgerLine} />
+        <span className={styles.burgerLine} />
+        <span className={styles.burgerLine} />
       </div>
-      {navActive ? (
-        <div className={classNames(styles.navMenu, styles.menu)}>
-          <ul className={styles.menuList}>
+
+      <div className={styles.menu}>
+        <ul className={menuListClass}>
+          <li className={styles.menuItem}>
+            <Link className={styles.menuLink} href={Routes.BASE}>
+              Главное
+            </Link>
+          </li>
+          {isAuth && (
             <li className={styles.menuItem}>
-              <Link href="/" className={styles.menuLink}>
-                Главное
+              <Link href={Routes.FAVORITES} className={styles.menuLink}>
+                Мой плейлист
               </Link>
             </li>
-            <li className={styles.menuItem}>Мой плейлист</li>
-            <li className={styles.menuItem}>
-              <Link href="/signin">Войти</Link>
-            </li>
-          </ul>
-        </div>
-      ) : (
-        <div></div>
-      )}
+          )}
+          <li className={styles.menuItem}>
+            <a onClick={handleUserAuth}>{isAuth ? "Выйти" : "Войти"}</a>
+          </li>
+        </ul>
+      </div>
     </nav>
   );
-}
+};
+
+export default Nav;
