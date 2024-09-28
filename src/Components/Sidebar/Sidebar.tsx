@@ -2,63 +2,77 @@
 
 import Image from "next/image";
 import styles from "./Sidebar.module.css";
-import { useAppDispatch, useAppSelector } from "@/store/store";
-import Routes from "@/app/Routes";
-import { setUserLogout } from "@/store/features/authSlice";
-import { useRouter } from "next/navigation";
-import useUserAuth from "@/hooks/useUserAuth";
-import Skeleton from "react-loading-skeleton";
+import { useAppDispatch, useAppSelector } from "@/hooks";
+import { logout } from "@/store/features/userSlice";
+import {
+  clearLikedTracks,
+  setCurrentTrack,
+} from "@/store/features/playlistSlice";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useEffect } from "react";
-import { getCustomCatalogs } from "@/store/features/customCatalogSlice";
+import { resetFilters } from "@/store/features/filtersSlice";
+
+const playlists = [
+  {
+    id: 1,
+    href: "/tracks/selection/2",
+    src: "/img/playlist01.png",
+    alt: "day's playlist",
+  },
+  {
+    id: 2,
+    href: "/tracks/selection/3",
+    src: "/img/playlist02.png",
+    alt: "100 dance hits",
+  },
+  {
+    id: 3,
+    href: "/tracks/selection/4",
+    src: "/img/playlist03.png",
+    alt: "indie charge",
+  },
+];
 
 const Sidebar = () => {
-  const router = useRouter();
   const dispatch = useAppDispatch();
-
-  const { isAuth, setLogout } = useUserAuth();
-  const username = useAppSelector((state) => state.auth.username);
-  const customCatalogs = useAppSelector((state) => state.customCatalog.customCatalogs);
-
-  const handleUserAuth = async () => {
-    if (isAuth) setLogout();
-    else router.push(Routes.SIGNIN);
-  };
+  const user = useAppSelector((state) => state.user.user);
+  const [isClient, setIsClient] = useState<boolean>(false);
 
   useEffect(() => {
-    const getCatalogs = async () => {
-      await dispatch(getCustomCatalogs());
-    };
-    getCatalogs();
+    setIsClient(true);
   }, []);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    dispatch(setCurrentTrack({ track: null, tracks: [] }));
+    dispatch(clearLikedTracks());
+  };
+
+  const handleResetFilters = () => {
+    dispatch(resetFilters());
+  };
 
   return (
     <div className={styles.mainSidebar}>
       <div className={styles.sidebarPersonal}>
-        <p className={styles.sidebarPersonalName}>{username}</p>
-        <div className={styles.sidebarIcon} onClick={handleUserAuth}>
+        <p className={styles.sidebarPersonalName}>
+          {isClient ? user?.username || "Пользователь" : ""}
+        </p>
+        <div onClick={() => handleLogout()} className={styles.sidebarIcon}>
           <svg>
-            <use xlinkHref="/img/icon/sprite.svg#icon-logout" />
+            <use xlinkHref="/img/icon/sprite.svg#logout" />
           </svg>
         </div>
       </div>
       <div className={styles.sidebarBlock}>
         <div className={styles.sidebarList}>
-          {customCatalogs === undefined && (
-            <>
-              <Skeleton className={styles.sidebarItem} width={250} height={150} />
-              <Skeleton className={styles.sidebarItem} width={250} height={150} />
-              <Skeleton className={styles.sidebarItem} width={250} height={150} />
-            </>
-          )}
-
-          {customCatalogs?.map((customCatalog) => (
-            <div className={styles.sidebarItem} key={customCatalog._id}>
-              <Link href={Routes.CUSTOMCATALOG(customCatalog._id)} className={styles.sidebarLink}>
+          {playlists.map((playlist) => (
+            <div key={playlist.id} className={styles.sidebarItem}>
+              <Link className={styles.sidebarLink} href={playlist.href} onClick={handleResetFilters}>
                 <Image
-                  alt={customCatalog.name}
-                  className={styles.sidebarImg}
-                  src={customCatalog.imagePath}
+                  priority={true}
+                  alt={playlist.alt}
+                  src={playlist.src}
                   width={250}
                   height={150}
                 />

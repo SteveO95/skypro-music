@@ -1,45 +1,44 @@
-import { handleError } from "@/components/Toast/Toast";
-import { dislikeTrack, likeTrack } from "@/services/api";
-import { setDislikeTrack, setLikeTrack } from "@/store/features/trackSlice";
-import { useAppDispatch, useAppSelector } from "@/store/store";
+import { disLikeTrack, likeTrack } from "@/api/playlist";
+import { useAppDispatch, useAppSelector } from "@/hooks";
+import { setDisLikeTrack, setLikeTrack } from "@/store/features/playlistSlice";
 
-const useLikeTrack = (trackID: number) => {
+const useLikeTrack = (trackId: number) => {
   const dispatch = useAppDispatch();
+  const tokens = useAppSelector((state) => state.user.tokens);
 
-  const tokens = {
-    access: useAppSelector((state) => state.auth.accessToken),
-    refresh: useAppSelector((state) => state.auth.refreshToken),
-  };
-  const likedTraks = useAppSelector((state) => state.track.likedPlaylistState);
+  const likeTracks = useAppSelector((state) => state.playlist.likedPlaylist);
+  const isLiked = !!(
+    likeTracks && likeTracks.find((track) => track._id === trackId)
+  );
 
-  // Получаем состояние лайка из избранных треков
-  // или получать в качестве пропса
-  const isLiked = !!likedTraks ? !!likedTraks.find((track) => track.id === trackID) : false;
-
-  const handleLike = async (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!tokens.access || !tokens.refresh) return handleError("Вы не авторизованы");
-
-    const action = isLiked ? dislikeTrack : likeTrack;
-
+  const handleLike = async () => {
+    if (!tokens || !tokens.access || !tokens.refresh)
+      return alert("Вы не авторизованы");
+    const action = isLiked ? disLikeTrack : likeTrack;
     try {
       await action({
-        trackId: trackID,
+        trackId: trackId,
         access: tokens.access,
         refresh: tokens.refresh,
       });
-
       if (isLiked) {
-        dispatch(setDislikeTrack(trackID));
+        dispatch(setDisLikeTrack(trackId));
       } else {
-        dispatch(setLikeTrack(trackID));
+        dispatch(setLikeTrack(trackId));
       }
-    } catch (error) {
-      handleError("Непредвиденная ошибка");
-      console.error(error);
+    } catch (error: any) {
+      console.error("Ошибка при изменении состояния трека:", error);
+      if (error.response) {
+        alert(
+          `Ошибка: ${error.response.data.message || "Не удалось обновить статус трека"}`
+        );
+      } else if (error.request) {
+        alert("Ошибка: Нет ответа от сервера");
+      } else {
+        alert(`Ошибка: ${error.message || "Что-то пошло не так"}`);
+      }
     }
   };
-
   return { handleLike, isLiked };
 };
 

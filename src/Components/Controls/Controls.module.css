@@ -1,0 +1,99 @@
+.playerControls {
+    display: flex;
+    flex-direction: row;
+    padding: 0 27px 0 31px;
+}
+
+.playerBtnPrev {
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    margin-right: 23px;
+}
+
+.playerBtnPrevSvg {
+    width: 15px;
+    height: 14px;
+}
+
+.playerBtnPlay {
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin-right: 23px;
+}
+
+.playerBtnPlaySvg {
+    width: 22px;
+    height: 20px;
+    fill: #d9d9d9;
+}
+
+.playerBtnNext {
+    margin-right: 28px;
+    fill: #a53939;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.playerBtnNextSvg {
+    width: 15px;
+    height: 14px;
+    fill: inherit;
+    stroke: #d9d9d9;
+}
+
+.playerBtnRepeat {
+    margin-right: 24px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+
+    &:hover svg {
+        fill: transparent;
+        stroke: #acacac;
+        cursor: pointer;
+    }
+
+    &:active svg {
+        fill: transparent;
+        stroke: #ffffff;
+        cursor: pointer;
+    }
+}
+
+.playerBtnRepeatSvg {
+    width: 18px;
+    height: 12px;
+    fill: transparent;
+    stroke: #696969;
+}
+
+.playerBtnShuffle {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+
+    &:hover svg {
+        fill: transparent;
+        stroke: #acacac;
+        cursor: pointer;
+    }
+
+    &:active svg {
+        fill: transparent;
+        stroke: #ffffff;
+        cursor: pointer;
+    }
+}
+
+.playerBtnShuffleSvg {
+    width: 19px;
+    height: 12px;
+    fill: transparent;
+    stroke: #696969;
+}

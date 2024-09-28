@@ -2,13 +2,12 @@ import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
 import ReduxProvider from "@/store/ReduxProvider";
-import Toast from "@/components/Toast/Toast";
 
 const montserrat = Montserrat({ subsets: ["cyrillic"] });
 
 export const metadata: Metadata = {
   title: "Skypro music",
-  description: "Прекрасная музыка для прекрасных людей",
+  description: "Музыка для души",
 };
 
 export default function RootLayout({

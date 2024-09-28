@@ -1,23 +1,32 @@
-import Search from "../Search/Search";
-import Filter from "../Filter/Filter";
-import Playlist from "../Playlist/Playlist";
+"use client";
+import { getPlaylist } from "@/api/playlist";
 import styles from "./Main.module.css";
+import CenterBlock from "@/components/CenterBlock/CenterBlock";
+import { useEffect, useState } from "react";
+import { useAppDispatch } from "@/hooks";
+import { setInitialTracks } from "@/store/features/playlistSlice";
 
-type Props = {
-  title: string;
-};
+const Main = () => {
+  const [tracks, setTracks] = useState([]);
+  const [error, setError] = useState("");
 
-const Main = ({ title }: Props) => {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    getPlaylist()
+      .then((data) => {
+        setTracks(data);
+        dispatch(setInitialTracks(data));
+      })
+      .catch((error) => {
+        setError(error.message);
+      });
+  }, [dispatch]);
+
   return (
-    <div className={styles.centerblock}>
-      <div className={styles.stickyContent}>
-        <Search />
-        <h2 className={styles.centerblockH2}>{title}</h2>
-        <Filter />
-      </div>
-
-      <Playlist />
-    </div>
+    <main className={styles.main}>
+      <CenterBlock tracks={tracks} error={error} />
+    </main>
   );
 };
 

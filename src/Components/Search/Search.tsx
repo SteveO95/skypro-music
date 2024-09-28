@@ -1,28 +1,26 @@
-import { useDispatch } from "react-redux";
+import React, { ChangeEvent } from "react";
 import styles from "./Search.module.css";
-import { filterPlaylist } from "@/store/features/trackSlice";
 
-const Search = () => {
-  const dispatch = useDispatch();
+type SearchProps = {
+  onSearch: (keyword: string) => void;
+};
+
+const Search = ({ onSearch }: SearchProps) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    onSearch(e.target.value);
+  };
 
   return (
-    <div className={styles.search}>
+    <div className={styles.centerblockSearch}>
       <svg className={styles.searchSvg}>
         <use xlinkHref="/img/icon/sprite.svg#icon-search" />
       </svg>
       <input
-        onChange={(e) => {
-          dispatch(
-            filterPlaylist({
-              operation: "add",
-              filter: { type: "search", value: e.currentTarget.value },
-            })
-          );
-        }}
         className={styles.searchText}
         name="search"
         placeholder="Поиск"
         type="search"
+        onChange={handleChange}
       />
     </div>
   );

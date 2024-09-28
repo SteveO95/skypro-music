@@ -1,25 +1,22 @@
 import Bar from "@/components/Bar/Bar";
-import Footer from "@/components/Footer/Footer";
-import Nav from "@/components/Nav/Nav";
+import Navigation from "@/components/Navigation/Navigation";
 import Sidebar from "@/components/Sidebar/Sidebar";
-import Wrapper from "@/components/Wrapper/Wrapper";
-import { ReactNode } from "react";
-import { SkeletonTheme } from "react-loading-skeleton";
-import styles from "./page.module.css";
-// import { Main } from "next/document";
+import { CurrentTrackProvider } from "@/contexts/CurrentTrackProvider";
+import { PlayerStateProvider } from "@/contexts/PlayerStateContext";
 
-export default function TracksLayout({ children }: { children: ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <Wrapper>
-      <SkeletonTheme baseColor="#202020" highlightColor="#444">
-        <main className={styles.main}>
-          <Nav />
-          {children}
-          <Sidebar />
-        </main>
-        <Bar />
-        <Footer />
-      </SkeletonTheme>
-    </Wrapper>
+    <div className="wrapper">
+      <div className="container">
+        <PlayerStateProvider>
+          <CurrentTrackProvider>
+            <Navigation />
+            {children}
+            <Sidebar />
+            <Bar />
+          </CurrentTrackProvider>
+        </PlayerStateProvider>
+      </div>
+    </div>
   );
 }
