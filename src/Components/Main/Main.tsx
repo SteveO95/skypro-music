@@ -25,4 +25,3 @@ export default function Main() {
 		</>
 	);
 }
-// да да , нет нет

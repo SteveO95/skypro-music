@@ -1,19 +1,19 @@
-'use client'
+'use client';
 
-import React from 'react'
-import styles from './Nav.module.css'
-import Image from 'next/image'
-import Link from 'next/link'
-import { routes } from '@/lib/routes'
-import { useAppDispatch, useAppSelector } from '@/store/store'
-import { useOutsideClick } from '@/hooks/useOutsideClick'
-import { resetFilterOptions } from '@/store/features/playlistSlice'
+import { useOutsideClick } from '@/hooks/useOutsideClick';
+import { routes } from '@/lib/routes';
+import { resetFilterOptions } from '@/store/features/playlistSlice';
+import { useAppDispatch, useAppSelector } from '@/store/store';
+import Image from 'next/image';
+import Link from 'next/link';
+import styles from './Nav.module.css';
+// да да , нет нет
 
 export default function Nav() {
-	const dispatch = useAppDispatch()
-	const { visible, setVisible, ref } = useOutsideClick(false)
-	const { user } = useAppSelector(state => state.user)
-	const handleOpenMenu = () => setVisible(prev => !prev)
+	const dispatch = useAppDispatch();
+	const { visible, setVisible, ref } = useOutsideClick(false);
+	const { user } = useAppSelector(state => state.user);
+	const handleOpenMenu = () => setVisible(prev => !prev);
 
 	return (
 		<nav className={styles.main__nav}>
@@ -67,5 +67,5 @@ export default function Nav() {
 				</div>
 			)}
 		</nav>
-	)
+	);
 }
