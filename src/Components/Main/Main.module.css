@@ -1,31 +1,6 @@
-.centerblock {
-  width: 600px;
-  -webkit-box-flex: 3;
-  -ms-flex-positive: 3;
-  flex-grow: 3;
-  padding: 0px 40px 75px;
-  overflow-y: auto;
-  height: 100vh;
-}
-
-.stickyContent {
-  padding-top: 20px;
-  padding-bottom: 50px;
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  background: var(--background);
-}
-
-.centerblock::-webkit-scrollbar {
-  display: none;
-}
-
-.centerblockH2 {
-  font-style: normal;
-  font-weight: 400;
-  font-size: 60px;
-  line-height: 72px;
-  letter-spacing: -0.8px;
-  margin-bottom: 45px;
+.main {
+    flex: 1 1 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }

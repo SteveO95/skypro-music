@@ -1,0 +1,127 @@
+.playlistItem {
+	width: 100%;
+	display: block;
+	margin-bottom: 12px;
+}
+
+.playlistTrack {
+	/*  display: -webkit-box;
+    display: -ms-flexbox; */
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.trackTitle {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	width: 447px;
+}
+
+.trackTitleImage {
+	width: 51px;
+	height: 51px;
+	padding: 16px;
+	background: #313131;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-right: 17px;
+}
+
+.trackTitleSvg {
+	width: 18px;
+	height: 17px;
+	fill: transparent;
+	stroke: #4e4e4e;
+}
+
+.trackTitleLink {
+	font-style: normal;
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 24px;
+	color: #ffffff;
+}
+
+.trackTitleSpan {
+	font-style: normal;
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 24px;
+	color: #4e4e4e;
+}
+
+.trackAuthor {
+	width: 321px;
+	display: flex;
+	justify-content: flex-start;
+}
+
+.trackAuthorLink {
+	font-style: normal;
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 24px;
+	color: #ffffff;
+	text-align: left;
+}
+
+.trackAlbum {
+	width: 245px;
+}
+
+.trackAlbumLink {
+	font-style: normal;
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 24px;
+	color: #696969;
+}
+
+.trackTimeSvg {
+	width: 14px;
+	height: 12px;
+	margin-right: 17px;
+	fill: transparent;
+	stroke: #fe2eed;
+}
+
+.trackTimeText {
+	font-style: normal;
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 24px;
+	text-align: right;
+	color: #696969;
+}
+
+.activeDot {
+	width: 16px;
+	height: 16px;
+	background-color: #b672ff;
+	border-radius: 8px;
+	display: block;
+}
+
+.playingDot {
+	width: 16px;
+	height: 16px;
+	background-color: #b672ff;
+	border-radius: 8px;
+	display: block;
+	animation: bubble_out 0.6s ease-in-out infinite both;
+}
+
+@keyframes bubble_out {
+	0%,
+	to {
+		transform: scale(0.5);
+	}
+
+	50% {
+		transform: scale(1);
+	}
+}

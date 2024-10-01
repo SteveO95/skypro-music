@@ -1,73 +1,108 @@
 "use client";
-
-import Wrapper from "@/components/Wrapper/Wrapper";
 import Image from "next/image";
 import styles from "./page.module.css";
-import classNames from "classnames";
-import Link from "next/link";
-import Routes from "../Routes";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Toast, { handleError, handleSuccess } from "@/components/Toast/Toast";
-import useUserAuth from "@/hooks/useUserAuth";
 
-export default function Signin() {
+import { getTokensState, getUser } from "@/store/features/userSlice";
+import { useAppDispatch } from "@/hooks";
+import Link from "next/link";
+import { ChangeEvent, useState } from "react";
+import { useRouter } from "next/navigation";
+
+function SignInPage() {
+  const dispatch = useAppDispatch();
+  const [loginError, setLoginError] = useState<string | null>(null);
   const router = useRouter();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const { setLogin } = useUserAuth();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
-  const signin = async (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSignin = async (
+    userData: {
+      email: string;
+      password: string;
+    },
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
     event.preventDefault();
+    if (!formData.email.trim() || !formData.password.trim()) {
+      setLoginError("Пожалуйста, заполните все поля");
+      return;
+    }
+    try {
+      await dispatch(getUser(userData)).unwrap();
+      await dispatch(getTokensState(userData)).unwrap();
 
-    const result = await setLogin({ email, password });
-
-    if (typeof result === "string") return handleError(result);
-
-    router.push(Routes.BASE);
+      router.push("/");
+    } catch (error: any) {
+      console.error("Ошибка:", error.message);
+      setLoginError(error.message);
+    }
   };
 
   return (
-    <Wrapper>
-      <div className={styles.Wrapper}>
-        <div className={styles.ContainerEnter}>
-          <div className={styles.ModalBlock}>
-            <form className={styles.ModalFormLogin}>
-              <div className={styles.ModalLogo}>
-                <Link href={Routes.BASE}>
-                  <Image src="/img/logo_modal.png" alt="Skyrpo logo" width={140} height={21} />
-                </Link>
+    <div className={styles.wrapper}>
+      <div className={styles.containerEnter}>
+        <div className={styles.modalBlock}>
+          <form action="#" className={styles.modalFormLogin}>
+            <Link href="/">
+              <div className={styles.modalLogo}>
+                <Image
+                  alt="logo"
+                  src="/img/logo_modal.png"
+                  width={140}
+                  height={21}
+                />
               </div>
-              <input
-                className={classNames(styles.ModalInput, styles.Login)}
-                type="text"
-                name="email"
-                placeholder="Почта"
-                autoComplete="username"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <input
-                className={classNames(styles.ModalInput, styles.Password)}
-                type="password"
-                name="password"
-                placeholder="Пароль"
-                autoComplete="current-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <button className={styles.ModalBtnEnter} onClick={signin}>
-                <a>Войти</a>
-              </button>
-              <button className={styles.ModalBtnSignup}>
-                <Link href={Routes.SIGNUP}>Зарегистрироваться</Link>
-              </button>
-            </form>
-          </div>
+            </Link>
+            <input
+              onChange={handleInputChange}
+              className={styles.modalInput}
+              name="email"
+              value={formData.email}
+              placeholder="Почта"
+              type="text"
+            />
+            <input
+              onChange={handleInputChange}
+              className={styles.modalInput}
+              name="password"
+              value={formData.password}
+              placeholder="Пароль"
+              type="password"
+            />
+            {loginError && <div className={styles.error}>{loginError}</div>}
+            <button
+              className={styles.modalBtnEnter}
+              onClick={(e) =>
+                handleSignin(
+                  {
+                    email: formData.email,
+                    password: formData.password,
+                  },
+                  e
+                )
+              }
+            >
+              Войти
+            </button>
+            <Link className={styles.modalBtnSignup} href="/signup">
+              Зарегистрироваться
+            </Link>
+          </form>
         </div>
       </div>
-      <Toast />
-    </Wrapper>
+    </div>
   );
 }
+export default SignInPage;
