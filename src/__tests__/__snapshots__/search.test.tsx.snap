@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Поиск рендер компонента 1`] = `
+<div
+  className="centerblock__search"
+>
+  <svg
+    className="search__svg"
+  >
+    <use
+      xlinkHref="/img/icon/sprite.svg#icon-search"
+    />
+  </svg>
+  <input
+    className="search__text"
+    name="search"
+    onChange={[Function]}
+    placeholder="Поиск"
+    type="search"
+    value=""
+  />
+</div>
+`;
+
+exports[`Поиск рендер компонента 2`] = `
+<div
+  className="centerblock__search"
+>
+  <svg
+    className="search__svg"
+  >
+    <use
+      xlinkHref="/img/icon/sprite.svg#icon-search"
+    />
+  </svg>
+  <input
+    className="search__text"
+    name="search"
+    onChange={[Function]}
+    placeholder="Поиск"
+    type="search"
+    value="1"
+  />
+</div>
+`;
+
+exports[`Поиск рендер компонента 3`] = `
+<div
+  className="centerblock__search"
+>
+  <svg
+    className="search__svg"
+  >
+    <use
+      xlinkHref="/img/icon/sprite.svg#icon-search"
+    />
+  </svg>
+  <input
+    className="search__text"
+    name="search"
+    onChange={[Function]}
+    placeholder="Поиск"
+    type="search"
+    value="один"
+  />
+</div>
+`;

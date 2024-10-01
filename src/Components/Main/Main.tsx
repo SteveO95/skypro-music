@@ -1,33 +1,28 @@
-"use client";
-import { getPlaylist } from "@/api/playlist";
-import styles from "./Main.module.css";
-import CenterBlock from "@/components/CenterBlock/CenterBlock";
-import { useEffect, useState } from "react";
-import { useAppDispatch } from "@/hooks";
-import { setInitialTracks } from "@/store/features/playlistSlice";
+'use client';
 
-const Main = () => {
-  const [tracks, setTracks] = useState([]);
-  const [error, setError] = useState("");
+import { tracksApi } from '@/api/tracksApi';
+import { useAppDispatch, useAppSelector } from '@/store/store';
+import { useEffect } from 'react';
+import Playlist from '../Playlist/PlaylistMain/Playlist';
 
-  const dispatch = useAppDispatch();
+export default function Main() {
+	const dispatch = useAppDispatch();
+	const { mainPlaylist } = useAppSelector(state => state.playlist);
 
-  useEffect(() => {
-    getPlaylist()
-      .then((data) => {
-        setTracks(data);
-        dispatch(setInitialTracks(data));
-      })
-      .catch((error) => {
-        setError(error.message);
-      });
-  }, [dispatch]);
+	useEffect(() => {
+		try {
+			dispatch(tracksApi.getTracks());
+		} catch (err) {
+			const error = err as Error;
+			console.error(error.message);
+			throw new Error(error.message);
+		}
+	}, [dispatch]);
 
-  return (
-    <main className={styles.main}>
-      <CenterBlock tracks={tracks} error={error} />
-    </main>
-  );
-};
-
-export default Main;
+	return (
+		<>
+			<Playlist playlist={mainPlaylist} title={'Треки'} />
+		</>
+	);
+}
+// да да , нет нет

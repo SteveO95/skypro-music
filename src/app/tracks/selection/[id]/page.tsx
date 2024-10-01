@@ -1,22 +1,31 @@
-import { getPlaylist, getSelectionPlaylist } from "@/api/playlist";
-import CenterBlock from "@/components/CenterBlock/CenterBlock";
-import { PlaylistType } from "@/types/playlist";
+'use client'
 
-type selectionPageType = {
-  params: { id: string };
-};
+import { tracksApi } from '@/api/tracksApi'
+import Playlist from '@/components/Playlist/PlaylistMain/Playlist'
+import { useAppDispatch, useAppSelector } from '@/store/store'
+import { useParams } from 'next/navigation'
+import React, { useEffect } from 'react'
 
-const selectionPage = async ({ params }: selectionPageType) => {
-  
-  const selectionData = await getSelectionPlaylist(params.id);
+export default function Selection() {
+	const dispatch = useAppDispatch()
+	const { id } = useParams<{ id: string }>()
+	const { selectionPlaylist, selectionData } = useAppSelector(
+		state => state.playlist,
+	)
 
-  const allTracks: PlaylistType[] = await getPlaylist();
+	useEffect(() => {
+		try {
+			dispatch(tracksApi.getTracks()).unwrap()
+			dispatch(tracksApi.getSelections(id))
+		} catch (err) {
+			const error = err as Error
+			console.error(error.message)
+		}
+	}, [dispatch, id])
 
-  const selectedTracks = allTracks.filter((track) =>
-    selectionData.includes(track._id)
-  );
-  const title = "подборка"
-  return <CenterBlock tracks={selectedTracks} title={title} />;
-};
-
-export default selectionPage;
+	return (
+		<>
+			<Playlist playlist={selectionPlaylist} title={selectionData?.name} />
+		</>
+	)
+}

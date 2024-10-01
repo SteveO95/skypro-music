@@ -1,78 +1,80 @@
-"use client";
+import { useLikeTrack } from '@/hooks/useLikeTrack'
+import { TrackDataType } from '@/lib/types'
+import { setCurrTrack, setIsPlaying } from '@/store/features/playlistSlice'
+import { useAppDispatch, useAppSelector } from '@/store/store'
+import { trackFormattedTime } from '@/utils/helpers'
+import classNames from 'classnames'
+import styles from './Track.module.css'
 
-import { PlaylistType } from "@/types/playlist";
-import styles from "./Track.module.css";
-import { formatTime } from "@/utils/formatTime";
-import { usePlayerState } from "@/contexts/PlayerStateContext";
-import { useAppDispatch, useAppSelector } from "@/hooks";
-import { setCurrentTrack } from "@/store/features/playlistSlice";
-import useLikeTrack from "@/hooks/useLikeTrack";
+export default function Track(track: TrackDataType) {
+	const dispatch = useAppDispatch()
+	const { mainPlaylist, currTrack, isPlaying } = useAppSelector(
+		state => state.playlist,
+	)
 
-type TrackProps = {
-  track: PlaylistType;
-  tracks: PlaylistType[];
-};
+	const { isLiked, handleLike } = useLikeTrack(track)
 
-const Track = ({ track, tracks }: TrackProps) => {
-  const { name, author, album, duration_in_seconds } = track;
+	const handlePlay = (track: TrackDataType, tracks: TrackDataType[]) => {
+		dispatch(setCurrTrack({ currTrack: track, mainPlaylist: tracks }))
+		dispatch(setIsPlaying(true))
+	}
 
-  const dispatch = useAppDispatch();
-  const { isLiked, handleLike } = useLikeTrack(track._id);
-  const { isPlaying, setIsPlaying } = usePlayerState();
-  const currentTrack = useAppSelector((state) => state.playlist.currentTrack);
-
-  const handleTrackClick = () => {
-    dispatch(setCurrentTrack({ track, tracks }));
-    setIsPlaying(true);
-  };
-
-  const isCurrentTrack = currentTrack?._id === track._id;
-
-  return (
-    <div className={styles.playlistItem}>
-      <div className={styles.playlistTrack}>
-        <div onClick={handleTrackClick} className={styles.trackTitle}>
-          <div className={styles.trackTitleImage}>
-            {isCurrentTrack ? (
-              <div
-                className={isPlaying ? styles.playingDot : styles.activeDot}
-              />
-            ) : (
-              <svg className={styles.trackTitleSvg}>
-                <use xlinkHref="/img/icon/sprite.svg#icon-note" />
-              </svg>
-            )}
-          </div>
-          <div className="track__title-text">
-            <span className={styles.trackTitleLink}>
-              {name}
-              <span className={styles.trackTitleSpan} />
-            </span>
-          </div>
-        </div>
-        <div className={styles.trackAuthor}>
-          <span className={styles.trackAuthorLink}>{author}</span>
-        </div>
-        <div className={styles.trackAlbum}>
-          <span className={styles.trackAlbumLink}>{album}</span>
-        </div>
-        <div onClick={handleLike}>
-          {isLiked ? (
-            <svg className={styles.trackTimeSvg}>
-              <use xlinkHref="/img/icon/sprite.svg#icon-like" />
-            </svg>
-          ) : (
-            <svg className={styles.trackTimeSvg}>
-              <use xlinkHref="/img/icon/sprite.svg#icon-dislike" />
-            </svg>
-          )}
-          <span className={styles.trackTimeText}>
-            {formatTime(duration_in_seconds)}
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default Track;
+	return (
+		<div
+			className={styles.playlist__item}
+			onClick={() => handlePlay(track, mainPlaylist)}
+		>
+			<div className={styles.playlist__track}>
+				<div className={styles.track__title}>
+					<div className={styles.track__title_image}>
+						{currTrack?._id === track._id ? (
+							<div
+								className={
+									isPlaying ? styles.playing_dot : styles.not_playing_dot
+								}
+							></div>
+						) : (
+							<svg className={styles.track__title_svg}>
+								<use xlinkHref='/img/icon/sprite.svg#icon-note' />
+							</svg>
+						)}
+					</div>
+					<div>
+						<a className={styles.track__title_link} href='#'>
+							{track.name} <span className={styles.track__title_span} />
+						</a>
+					</div>
+				</div>
+				<div className={styles.track__author}>
+					<a className={styles.track__author_link} href='#'>
+						{track.author}
+					</a>
+				</div>
+				<div className={styles.track__album}>
+					<a className={styles.track__album_link} href='#'>
+						{track.album}
+					</a>
+				</div>
+				<div className={styles.track__time}>
+					<div onClick={handleLike}>
+						<svg
+							className={classNames(
+								styles.track__time_svg,
+								isLiked
+									? styles.like_heartbeat_animation
+									: styles.dislike_jello_animation,
+							)}
+						>
+							<use
+								xlinkHref={`/img/icon/sprite.svg#${isLiked ? 'icon-like' : 'icon-dislike'}`}
+							/>
+						</svg>
+					</div>
+					<span className={styles.track__time_text}>
+						{trackFormattedTime(track.duration_in_seconds)}
+					</span>
+				</div>
+			</div>
+		</div>
+	)
+}
