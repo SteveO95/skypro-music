@@ -1,73 +1,71 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import styles from "./Nav.module.css";
-import classNames from "classnames";
-import { useState } from "react";
-import Routes from "@/app/Routes";
-import { useRouter } from "next/navigation";
-import useUserAuth from "@/hooks/useUserAuth";
+import { useOutsideClick } from '@/hooks/useOutsideClick';
+import { routes } from '@/lib/routes';
+import { resetFilterOptions } from '@/store/features/playlistSlice';
+import { useAppDispatch, useAppSelector } from '@/store/store';
+import Image from 'next/image';
+import Link from 'next/link';
+import styles from './Nav.module.css';
+// да да , нет нет
 
-import { getInitialPlaylist, setInitialPlaylist } from "@/store/features/trackSlice";
-import Link from "next/link";
+export default function Nav() {
+	const dispatch = useAppDispatch();
+	const { visible, setVisible, ref } = useOutsideClick(false);
+	const { user } = useAppSelector(state => state.user);
+	const handleOpenMenu = () => setVisible(prev => !prev);
 
-const Nav = () => {
-  const router = useRouter();
-  const { isAuth, setLogout } = useUserAuth();
-  const [isVisible, setIsVisible] = useState<boolean>(true);
+	return (
+		<nav className={styles.main__nav}>
+			<div className={styles.nav__logo}>
+				<Link href={routes.HOME}>
+					<Image
+						className={styles.logo__image}
+						src='/img/logo.png'
+						alt='logo'
+						width={113}
+						height={17}
+					/>
+				</Link>
+			</div>
 
-  const handleUserAuth = async () => {
-    if (isAuth) setLogout();
-    else router.push(Routes.SIGNIN);
-  };
+			<div
+				data-testid='burgerBtn'
+				className={styles.nav__burger}
+				ref={ref}
+				onClick={handleOpenMenu}
+			>
+				<span className={styles.burger__line} />
+				<span className={styles.burger__line} />
+				<span className={styles.burger__line} />
+			</div>
 
-  const menuListClass = classNames({
-    [styles.menuList]: true,
-    [styles.visible]: isVisible,
-  });
-
-  return (
-    <nav className={styles.nav}>
-      <div className={classNames(styles.navLogo, "logo")}>
-        <Image
-          className={styles.logoImage}
-          alt="Skypro logo"
-          src="/img/logo.png"
-          width={114}
-          height={17}
-        />
-      </div>
-
-      <div
-        className={classNames(styles.navBurger, "burger")}
-        onClick={() => setIsVisible((prev) => !prev)}
-      >
-        <span className={styles.burgerLine} />
-        <span className={styles.burgerLine} />
-        <span className={styles.burgerLine} />
-      </div>
-
-      <div className={styles.menu}>
-        <ul className={menuListClass}>
-          <li className={styles.menuItem}>
-            <Link className={styles.menuLink} href={Routes.BASE}>
-              Главное
-            </Link>
-          </li>
-          {isAuth && (
-            <li className={styles.menuItem}>
-              <Link href={Routes.FAVORITES} className={styles.menuLink}>
-                Мой плейлист
-              </Link>
-            </li>
-          )}
-          <li className={styles.menuItem}>
-            <a onClick={handleUserAuth}>{isAuth ? "Выйти" : "Войти"}</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-  );
-};
-
-export default Nav;
+			{visible && (
+				<div className={styles.nav__menu}>
+					<ul className={styles.menu__list}>
+						<li className={styles.menu__item}>
+							<Link className={styles.menu__link} href={routes.HOME}>
+								Главное
+							</Link>
+						</li>
+						{user && (
+							<li
+								className={styles.menu__item}
+								onClick={() => dispatch(resetFilterOptions())}
+							>
+								<Link className={styles.menu__link} href={routes.FAVORITE}>
+									Мой плейлист
+								</Link>
+							</li>
+						)}
+						<li className={styles.menu__item}>
+							<Link className={styles.menu__link} href={routes.LOGIN}>
+								Войти
+							</Link>
+						</li>
+					</ul>
+				</div>
+			)}
+		</nav>
+	);
+}

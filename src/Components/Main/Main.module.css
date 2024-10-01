@@ -1,31 +1,28 @@
-.centerblock {
-  width: 600px;
-  -webkit-box-flex: 3;
-  -ms-flex-positive: 3;
-  flex-grow: 3;
-  padding: 0px 40px 75px;
-  overflow-y: auto;
-  height: 100vh;
+.wrapper {
+	width: 100%;
+	min-height: 100%;
+	overflow: hidden;
+	background-color: #383838;
 }
 
-.stickyContent {
-  padding-top: 20px;
-  padding-bottom: 50px;
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  background: var(--background);
+.container {
+	max-width: 1920px;
+	height: 100vh;
+	margin: 0 auto;
+	position: relative;
+	background-color: #181818;
 }
 
-.centerblock::-webkit-scrollbar {
-  display: none;
-}
-
-.centerblockH2 {
-  font-style: normal;
-  font-weight: 400;
-  font-size: 60px;
-  line-height: 72px;
-  letter-spacing: -0.8px;
-  margin-bottom: 45px;
+.main {
+	-webkit-box-flex: 1;
+	-ms-flex: 1 1 auto;
+	flex: 1 1 auto;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-ms-flex-wrap: wrap;
+	flex-wrap: wrap;
+	-webkit-box-pack: justify;
+	-ms-flex-pack: justify;
+	justify-content: space-between;
 }
